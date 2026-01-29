@@ -1,0 +1,5 @@
+{
+    "powerquery.client.additionalSymbolsDirectories": [
+        "//wsl.localhost/Ubuntu-24.04/home/marco/projetos/mlops_project/.vscode/excel-pq-symbols"
+    ]
+}
