@@ -1,2 +1,10 @@
 [core]
     autostage = true
+    remote = local
+
+['remote "local"']
+    url = ./dvc-storage
+    remote = myremote
+
+['remote "myremote"']
+    url = s3://my-dvc-bucket

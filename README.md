@@ -1,11 +1,13 @@
 # ML Classifier - Breast Cancer Prediction
 
-A machine learning project that builds and deploys a neural network classifier for breast cancer prediction using the scikit-learn breast cancer dataset.
+A machine learning project that builds and deploys a neural network classifier for breast cancer prediction using the scikit-learn breast cancer dataset. The project uses DVC (Data Version Control) for pipeline management and reproducibility.
 
 ## Project Structure
 
 ```
 /mlops_project
+├── .dvc/                         # DVC configuration and cache
+├── .qodo/                        # Qodo configuration
 ├── app/                          # Web application
 │   ├── __init__.py               # Package marker
 │   ├── main.py                   # Flask app with prediction API
@@ -36,7 +38,10 @@ A machine learning project that builds and deploys a neural network classifier f
 │       ├── __init__.py           # Package marker
 │       └── train_model.py        # Neural network training
 ├── .dockerignore                 # Docker ignore rules
+├── .dvcignore                    # DVC ignore rules
 ├── Dockerfile                    # Docker build instructions
+├── dvc.lock                      # DVC pipeline lock file
+├── dvc.yaml                      # DVC pipeline definition
 ├── params.yaml                   # Configuration parameters
 ├── pyproject.toml                # Python dependencies and project metadata
 └── README.md                     # Project documentation
@@ -44,6 +49,7 @@ A machine learning project that builds and deploys a neural network classifier f
 
 ## Features
 
+- **DVC Pipeline**: Reproducible ML pipeline with data versioning and experiment tracking
 - **Data Pipeline**: Complete ETL pipeline from raw data to model-ready features
 - **Neural Network**: TensorFlow/Keras deep learning model with configurable architecture
 - **Web Interface**: Flask-based web application for making predictions
@@ -52,7 +58,15 @@ A machine learning project that builds and deploys a neural network classifier f
 
 ## Dependencies
 
-The project requires Python 3.12+ and the packages informed in `pyproject.toml`.
+The project requires Python 3.12+ and the following main packages:
+- dvc==3.59.1
+- flask==2.2.5
+- numpy==2.1.3
+- pandas==2.2.3
+- scikit-learn==1.6.1
+- tensorflow==2.19.0
+
+See `pyproject.toml` for the complete list.
 
 ## Installation
 
@@ -69,7 +83,12 @@ pip install -e .
 
 ## Configuration
 
-Model hyperparameters and data processing settings are configured in `params.yaml`.
+Model hyperparameters and data processing settings are configured in `params.yaml`:
+
+- **Training parameters**: learning_rate, hidden_layer_neurons, dropout_rate, epochs, batch_size
+- **Preprocessing parameters**: test_size, random_seed
+
+The DVC pipeline is defined in `dvc.yaml` with stages for data loading, preprocessing, feature engineering, training, and evaluation.
 
 ## Model Architecture
 
@@ -109,7 +128,25 @@ Each module can be run independently and saves its outputs for the next stage in
 
 ### Training the Model
 
-Run the complete ML pipeline (for proper logging to the terminal, run as modules with `python -m`):
+#### Using DVC Pipeline (Recommended)
+
+Run the complete ML pipeline using DVC:
+
+```bash
+# Run the entire pipeline
+dvc repro
+
+# Or run specific stages
+dvc repro load_data
+dvc repro preprocess_data
+dvc repro engineer_features
+dvc repro train
+dvc repro evaluate
+```
+
+#### Manual Execution
+
+Alternatively, run individual modules (for proper logging to the terminal, run as modules with `python -m`):
 
 ```bash
 # 1. Load and prepare raw data
